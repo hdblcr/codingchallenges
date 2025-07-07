@@ -1,26 +1,25 @@
+import collections
 class FindSumPairs:
 # LeetCode Daily Question 7/6/2025
 
-    def __init__(self, nums1: List[int], nums2: List[int]):
-        self.instructions = nums1
+    def __init__(self, nums1: list[int], nums2: list[int]):
         self.nums1 = nums1
         self.nums2 = nums2
-        self.output = []
-        for i in range(len(nums1)):
-            self.output.append([])
-        
+        self.counter = collections.Counter(nums2)
+        print("counter: ", self.counter)
 
     def add(self, index: int, val: int) -> None:
-        self.nums2[index] = self.nums2[index] + val
+        self.counter[self.nums2[index]] -= 1
+        self.nums2[index] += val
+        self.counter[self.nums2[index]] += 1
 
     def count(self, tot: int) -> int:
+        _nums1, _counter  = self.nums1, self.counter
         countTotals = 0
-        print('self.nums1: ', self.nums1, '\n')
-        print('self.nums2: ', self.nums2)
-        for index1 in range(len(self.nums1)):
-            for index2 in range(len(self.nums2)):
-                if self.nums1[index1] + self.nums2[index2] == tot:
-                    countTotals = countTotals + 1
+        for num in _nums1:
+            #  Check if tot - num (index of the value in hash map) exists
+            if (diff := tot - num) in _counter:
+                countTotals += _counter[diff]
         return countTotals
 
 # Your FindSumPairs object will be instantiated and called as such:
